@@ -1,0 +1,2700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BEMS | Biomedical Equipment Management System</title>
+
+<!-- Modern Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --primary:#00e5ff;
+    --secondary:#7c4dff;
+    --green:#00e676;
+    --orange:#ffab00;
+    --red:#ff1744;
+    --dark:#07111f;
+    --dark2:#0b1728;
+    --card:rgba(15,31,52,.78);
+    --border:rgba(255,255,255,.10);
+    --text:#f4f8ff;
+    --muted:#9db0c8;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%,rgba(0,229,255,.10),transparent 25%),
+        radial-gradient(circle at 90% 20%,rgba(124,77,255,.12),transparent 25%),
+        linear-gradient(135deg,#040b14,#07111f 50%,#050b14);
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+/* ================= ANIMATED BACKGROUND ================= */
+
+body::before,
+body::after{
+    content:"";
+    position:fixed;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.12;
+    z-index:-1;
+    animation:floatOrb 12s ease-in-out infinite alternate;
+}
+
+body::before{
+    background:#00e5ff;
+    top:-100px;
+    left:-100px;
+}
+
+body::after{
+    background:#7c4dff;
+    right:-100px;
+    bottom:-100px;
+    animation-delay:3s;
+}
+
+@keyframes floatOrb{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(100px,80px) scale(1.3);}
+}
+
+/* ================= LOGIN ================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+}
+
+.login-particle{
+    position:absolute;
+    width:5px;
+    height:5px;
+    background:var(--primary);
+    border-radius:50%;
+    box-shadow:0 0 15px var(--primary);
+    animation:particleMove linear infinite;
+}
+
+@keyframes particleMove{
+    from{
+        transform:translateY(100vh) translateX(0);
+        opacity:0;
+    }
+    20%{opacity:1;}
+    80%{opacity:1;}
+    to{
+        transform:translateY(-20vh) translateX(100px);
+        opacity:0;
+    }
+}
+
+.login-box{
+    width:100%;
+    max-width:430px;
+    padding:42px 35px;
+    background:rgba(8,20,35,.78);
+    border:1px solid rgba(0,229,255,.25);
+    border-radius:28px;
+    backdrop-filter:blur(20px);
+    box-shadow:
+        0 0 50px rgba(0,229,255,.10),
+        0 25px 80px rgba(0,0,0,.45);
+    position:relative;
+    z-index:2;
+    animation:loginAppear 1s cubic-bezier(.17,.67,.3,1.3);
+}
+
+.login-box::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:30px;
+    padding:2px;
+    background:linear-gradient(
+        120deg,
+        transparent,
+        var(--primary),
+        transparent,
+        var(--secondary),
+        transparent
+    );
+    background-size:300% 300%;
+    animation:borderFlow 5s linear infinite;
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+    mask-composite:exclude;
+    pointer-events:none;
+}
+
+@keyframes borderFlow{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+@keyframes loginAppear{
+    from{
+        opacity:0;
+        transform:translateY(50px) scale(.9);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+.login-logo{
+    width:85px;
+    height:85px;
+    margin:0 auto 20px;
+    border-radius:24px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:38px;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    box-shadow:
+        0 0 25px rgba(0,229,255,.35),
+        0 0 60px rgba(124,77,255,.2);
+    animation:logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse{
+    0%,100%{transform:scale(1) rotate(0deg);}
+    50%{transform:scale(1.06) rotate(2deg);}
+}
+
+.login-title{
+    text-align:center;
+    font-family:'Orbitron',sans-serif;
+    font-size:27px;
+    letter-spacing:2px;
+    margin-bottom:8px;
+}
+
+.login-subtitle{
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:30px;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    color:#b8c8db;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.input-wrap{
+    position:relative;
+}
+
+.input-wrap span{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--primary);
+}
+
+.input-wrap input{
+    width:100%;
+    padding:15px 45px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    outline:none;
+    color:white;
+    background:rgba(255,255,255,.045);
+    transition:.3s;
+    font-family:inherit;
+}
+
+.input-wrap input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 20px rgba(0,229,255,.13);
+    background:rgba(0,229,255,.04);
+}
+
+.show-password{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    color:#8ea4bc;
+}
+
+.login-btn{
+    width:100%;
+    padding:15px;
+    border:0;
+    border-radius:13px;
+    color:#001018;
+    font-weight:800;
+    font-size:15px;
+    cursor:pointer;
+    background:linear-gradient(100deg,var(--primary),#66f5ff);
+    box-shadow:0 0 25px rgba(0,229,255,.18);
+    transition:.3s;
+    position:relative;
+    overflow:hidden;
+}
+
+.login-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 35px rgba(0,229,255,.3);
+}
+
+.login-btn:active{
+    transform:scale(.97);
+}
+
+.login-error{
+    display:none;
+    color:#ff6e86;
+    background:rgba(255,23,68,.08);
+    border:1px solid rgba(255,23,68,.2);
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
+    margin-bottom:15px;
+    font-size:13px;
+}
+
+/* ================= APP ================= */
+
+#app{
+    display:none;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:250px;
+    background:rgba(5,15,27,.91);
+    backdrop-filter:blur(18px);
+    border-right:1px solid var(--border);
+    padding:25px 15px;
+    z-index:100;
+    transition:.4s;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:5px 10px 30px;
+}
+
+.brand-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    box-shadow:0 0 20px rgba(0,229,255,.25);
+    font-size:20px;
+}
+
+.brand-text{
+    font-family:'Orbitron',sans-serif;
+    font-size:16px;
+    letter-spacing:1px;
+}
+
+.brand-text small{
+    display:block;
+    color:var(--primary);
+    font-family:'Inter',sans-serif;
+    font-size:9px;
+    letter-spacing:2px;
+    margin-top:3px;
+}
+
+.nav-title{
+    color:#5f7792;
+    font-size:10px;
+    letter-spacing:2px;
+    padding:0 12px 10px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:13px 14px;
+    border-radius:12px;
+    margin-bottom:5px;
+    cursor:pointer;
+    color:#91a6bc;
+    font-size:13px;
+    transition:.3s;
+    position:relative;
+    overflow:hidden;
+}
+
+.nav-item::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:3px;
+    background:var(--primary);
+    transform:scaleY(0);
+    transition:.3s;
+}
+
+.nav-item:hover{
+    color:white;
+    background:rgba(0,229,255,.06);
+    transform:translateX(4px);
+}
+
+.nav-item.active{
+    color:white;
+    background:linear-gradient(90deg,rgba(0,229,255,.13),rgba(124,77,255,.05));
+    box-shadow:inset 0 0 20px rgba(0,229,255,.03);
+}
+
+.nav-item.active::before{
+    transform:scaleY(1);
+}
+
+.nav-icon{
+    width:20px;
+    text-align:center;
+    color:var(--primary);
+}
+
+/* ================= MAIN ================= */
+
+.main{
+    margin-left:250px;
+    min-height:100vh;
+    padding:25px 30px 50px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.page-heading h1{
+    font-family:'Orbitron',sans-serif;
+    font-size:25px;
+    letter-spacing:1px;
+}
+
+.page-heading p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:5px;
+}
+
+.user-area{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.user-info{
+    text-align:right;
+}
+
+.user-info small{
+    display:block;
+    color:#70869e;
+    font-size:10px;
+}
+
+.user-info strong{
+    font-size:13px;
+}
+
+.avatar{
+    width:43px;
+    height:43px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:#001018;
+    font-weight:800;
+    box-shadow:0 0 20px rgba(0,229,255,.2);
+}
+
+.logout-btn{
+    background:rgba(255,23,68,.08);
+    border:1px solid rgba(255,23,68,.2);
+    color:#ff607a;
+    padding:9px 12px;
+    border-radius:9px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.logout-btn:hover{
+    background:rgba(255,23,68,.16);
+    transform:translateY(-2px);
+}
+
+/* ================= PAGE ================= */
+
+.page{
+    display:none;
+    animation:pageIn .5s ease;
+}
+
+.page.active{
+    display:block;
+}
+
+@keyframes pageIn{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ================= STATS ================= */
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    position:relative;
+    padding:22px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:var(--card);
+    backdrop-filter:blur(15px);
+    overflow:hidden;
+    transition:.35s;
+    animation:cardAppear .7s ease both;
+}
+
+.stat-card:nth-child(2){animation-delay:.1s;}
+.stat-card:nth-child(3){animation-delay:.2s;}
+.stat-card:nth-child(4){animation-delay:.3s;}
+
+@keyframes cardAppear{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.stat-card:hover{
+    transform:translateY(-7px);
+    border-color:rgba(0,229,255,.3);
+    box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+
+.stat-card::after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    right:-45px;
+    bottom:-45px;
+    border-radius:50%;
+    background:var(--primary);
+    opacity:.05;
+}
+
+.stat-icon{
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:19px;
+    margin-bottom:15px;
+}
+
+.blue{background:rgba(0,229,255,.1);color:var(--primary);}
+.green{background:rgba(0,230,118,.1);color:var(--green);}
+.orange{background:rgba(255,171,0,.1);color:var(--orange);}
+.red{background:rgba(255,23,68,.1);color:var(--red);}
+
+.stat-card h3{
+    font-size:28px;
+    font-family:'Orbitron',sans-serif;
+}
+
+.stat-card p{
+    color:#7890a8;
+    font-size:11px;
+    margin-top:4px;
+}
+
+/* ================= PANELS ================= */
+
+.panel{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:22px;
+    backdrop-filter:blur(15px);
+    margin-bottom:22px;
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.panel-header h2{
+    font-family:'Orbitron',sans-serif;
+    font-size:15px;
+}
+
+.panel-header span{
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* ================= EQUIPMENT ================= */
+
+.toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.search-box{
+    position:relative;
+    flex:1;
+    max-width:400px;
+}
+
+.search-box span{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--primary);
+}
+
+.search-box input{
+    width:100%;
+    padding:12px 15px 12px 40px;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    border-radius:11px;
+    outline:none;
+    color:white;
+    transition:.3s;
+}
+
+.search-box input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 20px rgba(0,229,255,.1);
+}
+
+.primary-btn{
+    border:0;
+    border-radius:11px;
+    padding:12px 17px;
+    cursor:pointer;
+    background:linear-gradient(100deg,var(--primary),#54efff);
+    color:#001018;
+    font-weight:800;
+    transition:.3s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 25px rgba(0,229,255,.2);
+}
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px;
+}
+
+th{
+    text-align:left;
+    padding:13px 10px;
+    color:#7188a0;
+    font-size:10px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    border-bottom:1px solid var(--border);
+}
+
+td{
+    padding:15px 10px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:12px;
+}
+
+tbody tr{
+    transition:.25s;
+}
+
+tbody tr:hover{
+    background:rgba(0,229,255,.035);
+    transform:scale(1.005);
+}
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:700;
+}
+
+.status::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:currentColor;
+    box-shadow:0 0 7px currentColor;
+}
+
+.status-working{
+    color:var(--green);
+    background:rgba(0,230,118,.08);
+}
+
+.status-maintenance{
+    color:var(--orange);
+    background:rgba(255,171,0,.08);
+}
+
+.status-out{
+    color:var(--red);
+    background:rgba(255,23,68,.08);
+}
+
+.delete-btn{
+    border:0;
+    background:rgba(255,23,68,.08);
+    color:#ff5874;
+    border-radius:7px;
+    padding:7px 9px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.delete-btn:hover{
+    background:rgba(255,23,68,.18);
+    transform:scale(1.08);
+}
+
+/* ================= QUICK GRID ================= */
+
+.quick-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.quick-card{
+    padding:22px;
+    border-radius:17px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.025);
+    transition:.35s;
+}
+
+.quick-card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(0,229,255,.2);
+}
+
+.quick-card .big-icon{
+    font-size:30px;
+    margin-bottom:15px;
+}
+
+.quick-card h3{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.quick-card p{
+    color:#7890a8;
+    font-size:11px;
+    line-height:1.6;
+}
+
+/* ================= DEPARTMENTS ================= */
+
+.department-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.department{
+    padding:23px;
+    border-radius:18px;
+    background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    border:1px solid var(--border);
+    transition:.35s;
+}
+
+.department:hover{
+    transform:translateY(-6px) rotateX(2deg);
+    border-color:rgba(0,229,255,.3);
+    box-shadow:0 15px 30px rgba(0,0,0,.25);
+}
+
+.department-icon{
+    font-size:30px;
+    margin-bottom:14px;
+}
+
+.department h3{
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.department p{
+    color:#8195aa;
+    font-size:11px;
+}
+
+/* ================= ENGINEER ================= */
+
+.engineer-card{
+    display:flex;
+    gap:25px;
+    align-items:center;
+    padding:30px;
+}
+
+.engineer-avatar{
+    width:100px;
+    height:100px;
+    flex-shrink:0;
+    border-radius:25px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Orbitron',sans-serif;
+    font-size:26px;
+    color:#001018;
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    box-shadow:0 0 35px rgba(0,229,255,.2);
+    animation:engineerPulse 3s infinite;
+}
+
+@keyframes engineerPulse{
+    0%,100%{box-shadow:0 0 25px rgba(0,229,255,.15);}
+    50%{box-shadow:0 0 45px rgba(0,229,255,.35);}
+}
+
+.engineer-info h2{
+    font-family:'Orbitron',sans-serif;
+    font-size:20px;
+}
+
+.engineer-info .role{
+    color:var(--primary);
+    font-size:12px;
+    margin:6px 0 12px;
+}
+
+.engineer-info p{
+    color:#8ca1b7;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.tag-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:15px;
+}
+
+.tag{
+    padding:6px 9px;
+    border-radius:7px;
+    background:rgba(0,229,255,.06);
+    border:1px solid rgba(0,229,255,.12);
+    color:#8cefff;
+    font-size:9px;
+}
+
+/* ================= MODAL ================= */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(8px);
+    z-index:500;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+    animation:fadeIn .25s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+.modal-box{
+    width:100%;
+    max-width:500px;
+    max-height:90vh;
+    overflow-y:auto;
+    background:#0b192b;
+    border:1px solid rgba(0,229,255,.2);
+    border-radius:22px;
+    padding:27px;
+    animation:modalUp .4s ease;
+}
+
+@keyframes modalUp{
+    from{
+        transform:translateY(40px) scale(.95);
+        opacity:0;
+    }
+    to{
+        transform:translateY(0) scale(1);
+        opacity:1;
+    }
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.modal-header h2{
+    font-family:'Orbitron',sans-serif;
+    font-size:17px;
+}
+
+.close{
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:9px;
+    background:rgba(255,255,255,.06);
+    color:white;
+    cursor:pointer;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    color:#90a4ba;
+    font-size:11px;
+    margin-bottom:7px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    padding:12px;
+    color:white;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--border);
+    border-radius:10px;
+    outline:none;
+}
+
+.form-group select option{
+    background:#0b192b;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+    border-color:var(--primary);
+}
+
+.form-actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.secondary-btn{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+    color:#b8c8d8;
+    cursor:pointer;
+}
+
+.form-actions .primary-btn{
+    flex:1;
+}
+
+/* ================= REPORT ================= */
+
+.report-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.report-card{
+    padding:25px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:rgba(255,255,255,.025);
+    transition:.3s;
+}
+
+.report-card:hover{
+    transform:translateY(-5px);
+}
+
+.report-card h3{
+    font-family:'Orbitron',sans-serif;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.report-card p{
+    color:#8094aa;
+    font-size:11px;
+    line-height:1.7;
+}
+
+.print-btn{
+    margin-top:15px;
+    padding:9px 13px;
+    border:1px solid rgba(0,229,255,.2);
+    background:rgba(0,229,255,.06);
+    color:var(--primary);
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+    text-align:center;
+    color:#50667d;
+    font-size:10px;
+    margin-top:35px;
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.05);
+}
+
+.footer strong{
+    color:var(--primary);
+}
+
+/* ================= MOBILE ================= */
+
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:1000px){
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .quick-grid,
+    .department-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:750px){
+
+    .sidebar{
+        transform:translateX(-100%);
+        width:270px;
+        box-shadow:20px 0 50px rgba(0,0,0,.4);
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px 15px 40px;
+    }
+
+    .mobile-menu{
+        display:flex;
+        width:40px;
+        height:40px;
+        border-radius:10px;
+        align-items:center;
+        justify-content:center;
+        border:1px solid var(--border);
+        background:rgba(255,255,255,.04);
+        color:var(--primary);
+        cursor:pointer;
+        margin-right:10px;
+    }
+
+    .topbar{
+        align-items:flex-start;
+    }
+
+    .page-heading{
+        display:flex;
+        align-items:center;
+    }
+
+    .page-heading h1{
+        font-size:19px;
+    }
+
+    .user-info{
+        display:none;
+    }
+
+    .logout-btn{
+        padding:8px;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat-card{
+        padding:16px;
+    }
+
+    .stat-card h3{
+        font-size:22px;
+    }
+
+    .quick-grid,
+    .department-grid,
+    .report-grid{
+        grid-template-columns:1fr;
+    }
+
+    .toolbar{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .search-box{
+        max-width:none;
+    }
+
+    .engineer-card{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .tag-list{
+        justify-content:center;
+    }
+
+    .panel{
+        padding:16px;
+    }
+}
+
+@media(max-width:430px){
+
+    .login-box{
+        padding:32px 22px;
+    }
+
+    .login-title{
+        font-size:22px;
+    }
+
+    .stats-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stat-icon{
+        width:37px;
+        height:37px;
+        font-size:16px;
+    }
+
+    .stat-card h3{
+        font-size:19px;
+    }
+
+    .stat-card p{
+        font-size:9px;
+    }
+}
+
+/* ================= SCROLLBAR ================= */
+
+::-webkit-scrollbar{
+    width:7px;
+    height:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#06101c;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#18334e;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:var(--primary);
+}
+
+/* ================= RIPPLE ================= */
+
+.ripple{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,.4);
+    transform:scale(0);
+    animation:rippleEffect .6s linear;
+    pointer-events:none;
+}
+
+@keyframes rippleEffect{
+    to{
+        transform:scale(4);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= LOGIN ================= -->
+
+<div id="loginPage">
+
+    <div class="login-particle" style="left:10%;animation-duration:8s;"></div>
+    <div class="login-particle" style="left:25%;animation-duration:12s;animation-delay:2s;"></div>
+    <div class="login-particle" style="left:45%;animation-duration:10s;animation-delay:4s;"></div>
+    <div class="login-particle" style="left:70%;animation-duration:14s;animation-delay:1s;"></div>
+    <div class="login-particle" style="left:85%;animation-duration:9s;animation-delay:3s;"></div>
+
+    <div class="login-box">
+
+        <div class="login-logo">⚕</div>
+
+        <h1 class="login-title">BEMS</h1>
+
+        <p class="login-subtitle">
+            BIOMEDICAL EQUIPMENT MANAGEMENT SYSTEM
+        </p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label>USERNAME</label>
+
+                <div class="input-wrap">
+                    <span>👤</span>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter your name"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>PASSWORD</label>
+
+                <div class="input-wrap">
+                    <span>🔐</span>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <span class="show-password" onclick="togglePassword()">👁</span>
+                </div>
+            </div>
+
+            <div class="login-error" id="loginError">
+                Invalid password. Please try again.
+            </div>
+
+            <button class="login-btn" type="submit">
+                ACCESS BEMS 🚀
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+
+<!-- ================= APP ================= -->
+
+<div id="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">⚕</div>
+
+            <div class="brand-text">
+                BEMS
+                <small>BIOMEDICAL SYSTEM</small>
+            </div>
+
+        </div>
+
+        <div class="nav-title">MAIN MENU</div>
+
+        <div class="nav-item active" onclick="showPage('dashboard',this)">
+            <span class="nav-icon">▦</span>
+            Dashboard
+        </div>
+
+        <div class="nav-item" onclick="showPage('equipment',this)">
+            <span class="nav-icon">⚙</span>
+            Equipment
+        </div>
+
+        <div class="nav-item" onclick="showPage('maintenance',this)">
+            <span class="nav-icon">🔧</span>
+            Maintenance
+        </div>
+
+        <div class="nav-item" onclick="showPage('departments',this)">
+            <span class="nav-icon">🏥</span>
+            Departments
+        </div>
+
+        <div class="nav-item" onclick="showPage('engineers',this)">
+            <span class="nav-icon">👨‍🔧</span>
+            Engineers
+        </div>
+
+        <div class="nav-item" onclick="showPage('reports',this)">
+            <span class="nav-icon">📊</span>
+            Reports
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div class="page-heading">
+
+                <button class="mobile-menu" onclick="toggleSidebar()">
+                    ☰
+                </button>
+
+                <div>
+                    <h1 id="pageTitle">Dashboard</h1>
+                    <p>Biomedical Equipment Management System</p>
+                </div>
+
+            </div>
+
+            <div class="user-area">
+
+                <div class="user-info">
+                    <small>LOGGED IN AS</small>
+                    <strong id="loggedUser">User</strong>
+                </div>
+
+                <div class="avatar" id="userAvatar">U</div>
+
+                <button class="logout-btn" onclick="logout()">
+                    ⎋
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section class="page active" id="dashboard">
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">⚙</div>
+                    <h3 id="totalCount">0</h3>
+                    <p>Total Equipment</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <h3 id="workingCount">0</h3>
+                    <p>Working Equipment</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">🔧</div>
+                    <h3 id="maintenanceCount">0</h3>
+                    <p>Under Maintenance</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon red">!</div>
+                    <h3 id="outCount">0</h3>
+                    <p>Out of Service</p>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Equipment Overview</h2>
+                    <span>LIVE SYSTEM DATA</span>
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Equipment</th>
+                                <th>Department</th>
+                                <th>Serial</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="dashboardTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <div class="quick-grid">
+
+                <div class="quick-card">
+                    <div class="big-icon">🩺</div>
+                    <h3>Patient Safety</h3>
+                    <p>
+                        Proper equipment maintenance helps protect patients
+                        and improve healthcare service quality.
+                    </p>
+                </div>
+
+                <div class="quick-card">
+                    <div class="big-icon">⚡</div>
+                    <h3>Preventive Maintenance</h3>
+                    <p>
+                        Schedule regular inspection, testing, calibration
+                        and servicing of biomedical equipment.
+                    </p>
+                </div>
+
+                <div class="quick-card">
+                    <div class="big-icon">📡</div>
+                    <h3>Equipment Monitoring</h3>
+                    <p>
+                        Monitor equipment status and identify machines
+                        requiring technical intervention.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= EQUIPMENT ================= -->
+
+        <section class="page" id="equipment">
+
+            <div class="panel">
+
+                <div class="toolbar">
+
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input
+                            type="text"
+                            id="equipmentSearch"
+                            placeholder="Search equipment..."
+                            oninput="searchEquipment()"
+                        >
+                    </div>
+
+                    <button class="primary-btn" onclick="openModal()">
+                        + Add Equipment
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Equipment</th>
+                                <th>Department</th>
+                                <th>Serial Number</th>
+                                <th>Manufacturer</th>
+                                <th>Model</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="equipmentTable"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= MAINTENANCE ================= -->
+
+        <section class="page" id="maintenance">
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Maintenance Management</h2>
+                    <span>ENGINEERING CONTROL</span>
+                </div>
+
+                <div class="quick-grid">
+
+                    <div class="quick-card">
+                        <div class="big-icon">🛠️</div>
+                        <h3>Preventive Maintenance</h3>
+                        <p>
+                            Planned maintenance performed periodically
+                            to reduce equipment failure.
+                        </p>
+                        <button class="print-btn" onclick="maintenanceMessage()">
+                            View Schedule
+                        </button>
+                    </div>
+
+                    <div class="quick-card">
+                        <div class="big-icon">🚨</div>
+                        <h3>Corrective Maintenance</h3>
+                        <p>
+                            Repair activities performed after equipment
+                            failure or malfunction.
+                        </p>
+                        <button class="print-btn" onclick="maintenanceMessage()">
+                            View Requests
+                        </button>
+                    </div>
+
+                    <div class="quick-card">
+                        <div class="big-icon">📐</div>
+                        <h3>Calibration</h3>
+                        <p>
+                            Verification and adjustment of equipment
+                            measurement accuracy.
+                        </p>
+                        <button class="print-btn" onclick="maintenanceMessage()">
+                            Calibration List
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= DEPARTMENTS ================= -->
+
+        <section class="page" id="departments">
+
+            <div class="department-grid">
+
+                <div class="department">
+                    <div class="department-icon">❤️</div>
+                    <h3>Cardiology</h3>
+                    <p>ECG, Defibrillator, Patient Monitor and related equipment.</p>
+                </div>
+
+                <div class="department">
+                    <div class="department-icon">🫁</div>
+                    <h3>ICU</h3>
+                    <p>Ventilators, monitors, infusion pumps and critical care devices.</p>
+                </div>
+
+                <div class="department">
+                    <div class="department-icon">🚑</div>
+                    <h3>Emergency</h3>
+                    <p>Emergency monitors, defibrillators and resuscitation equipment.</p>
+                </div>
+
+                <div class="department">
+                    <div class="department-icon">☢️</div>
+                    <h3>Radiology</h3>
+                    <p>X-Ray, ultrasound, CT and diagnostic imaging equipment.</p>
+                </div>
+
+                <div class="department">
+                    <div class="department-icon">👶</div>
+                    <h3>Neonatal</h3>
+                    <p>Infant warmers, incubators, neonatal monitors and CPAP systems.</p>
+                </div>
+
+                <div class="department">
+                    <div class="department-icon">🛏️</div>
+                    <h3>Medical Ward</h3>
+                    <p>Infusion pumps, monitors, oxygen systems and other equipment.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= ENGINEERS ================= -->
+
+        <section class="page" id="engineers">
+
+            <div class="panel engineer-card">
+
+                <div class="engineer-avatar">
+                    EC
+                </div>
+
+                <div class="engineer-info">
+
+                    <h2>Eng. Denis C. Shayo</h2>
+
+                    <div class="role">
+                        BIOMEDICAL EQUIPMENT ENGINEER
+                    </div>
+
+                    <p>
+                        Responsible for installation, inspection, preventive
+                        maintenance, corrective maintenance, calibration,
+                        troubleshooting and management of medical equipment.
+                    </p>
+
+                    <div class="tag-list">
+                        <span class="tag">Medical Equipment</span>
+                        <span class="tag">Maintenance</span>
+                        <span class="tag">Calibration</span>
+                        <span class="tag">Troubleshooting</span>
+                        <span class="tag">Safety Testing</span>
+                        <span class="tag">BEMS</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+                    <h2>Biomedical Engineering Responsibilities</h2>
+                </div>
+
+                <div class="quick-grid">
+
+                    <div class="quick-card">
+                        <div class="big-icon">🔍</div>
+                        <h3>Inspection</h3>
+                        <p>Check equipment condition and identify possible faults.</p>
+                    </div>
+
+                    <div class="quick-card">
+                        <div class="big-icon">🔧</div>
+                        <h3>Maintenance</h3>
+                        <p>Perform preventive and corrective maintenance activities.</p>
+                    </div>
+
+                    <div class="quick-card">
+                        <div class="big-icon">📏</div>
+                        <h3>Calibration</h3>
+                        <p>Ensure medical equipment produces accurate measurements.</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= REPORTS ================= -->
+
+        <section class="page" id="reports">
+
+            <div class="report-grid">
+
+                <div class="report-card">
+                    <h3>📊 Equipment Report</h3>
+                    <p>
+                        Generate a report containing the current equipment
+                        inventory and operational status.
+                    </p>
+                    <button class="print-btn" onclick="printReport()">
+                        Print Report
+                    </button>
+                </div>
+
+                <div class="report-card">
+                    <h3>🔧 Maintenance Report</h3>
+                    <p>
+                        Review equipment requiring maintenance and
+                        engineering intervention.
+                    </p>
+                    <button class="print-btn" onclick="maintenanceMessage()">
+                        Generate
+                    </button>
+                </div>
+
+                <div class="report-card">
+                    <h3>🏥 Department Report</h3>
+                    <p>
+                        View biomedical equipment distribution across
+                        hospital departments.
+                    </p>
+                    <button class="print-btn" onclick="printReport()">
+                        Print
+                    </button>
+                </div>
+
+                <div class="report-card">
+                    <h3>📋 Inventory Report</h3>
+                    <p>
+                        Complete inventory summary of equipment registered
+                        in the BEMS database.
+                    </p>
+                    <button class="print-btn" onclick="printReport()">
+                        Generate
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <div class="footer">
+            BEMS © 2026 | Developed by
+            <strong>Eng. Denis C. Shayo</strong>
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- ================= ADD EQUIPMENT MODAL ================= -->
+
+<div class="modal" id="equipmentModal">
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Add Equipment</h2>
+
+            <button class="close" onclick="closeModal()">
+                ✕
+            </button>
+
+        </div>
+
+        <form id="equipmentForm">
+
+            <div class="form-group">
+                <label>EQUIPMENT NAME</label>
+                <input type="text" id="eqName" placeholder="e.g. Ventilator" required>
+            </div>
+
+            <div class="form-group">
+                <label>DEPARTMENT</label>
+                <select id="eqDepartment" required>
+                    <option value="">Select Department</option>
+                    <option>ICU</option>
+                    <option>Cardiology</option>
+                    <option>Emergency</option>
+                    <option>Radiology</option>
+                    <option>Neonatal</option>
+                    <option>Medical Ward</option>
+                    <option>Operating Theatre</option>
+                    <option>Laboratory</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>SERIAL NUMBER</label>
+                <input type="text" id="eqSerial" placeholder="e.g. VNT-007" required>
+            </div>
+
+            <div class="form-group">
+                <label>MANUFACTURER</label>
+                <input type="text" id="eqManufacturer" placeholder="e.g. Philips" required>
+            </div>
+
+            <div class="form-group">
+                <label>MODEL</label>
+                <input type="text" id="eqModel" placeholder="e.g. V60" required>
+            </div>
+
+            <div class="form-group">
+                <label>STATUS</label>
+                <select id="eqStatus" required>
+                    <option value="Working">Working</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Out of Service">Out of Service</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+                <button type="submit" class="primary-btn">
+                    Add Equipment
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   BEMS JAVASCRIPT
+========================================================= */
+
+
+/* ================= PASSWORD ================= */
+
+const correctPassword = "jd@529";
+
+
+/* ================= EQUIPMENT DATA ================= */
+
+let equipment = [
+
+    {
+        id:1,
+        name:"Ventilator",
+        department:"ICU",
+        serial:"VNT-001",
+        manufacturer:"Philips",
+        model:"V60",
+        status:"Working"
+    },
+
+    {
+        id:2,
+        name:"Patient Monitor",
+        department:"Emergency",
+        serial:"PM-002",
+        manufacturer:"Mindray",
+        model:"iMEC12",
+        status:"Working"
+    },
+
+    {
+        id:3,
+        name:"Infusion Pump",
+        department:"Medical Ward",
+        serial:"IP-003",
+        manufacturer:"B.Braun",
+        model:"Infusomat",
+        status:"Maintenance"
+    },
+
+    {
+        id:4,
+        name:"ECG Machine",
+        department:"Cardiology",
+        serial:"ECG-004",
+        manufacturer:"GE Healthcare",
+        model:"MAC 2000",
+        status:"Working"
+    },
+
+    {
+        id:5,
+        name:"Ultrasound",
+        department:"Radiology",
+        serial:"US-005",
+        manufacturer:"Mindray",
+        model:"DC-70",
+        status:"Out of Service"
+    },
+
+    {
+        id:6,
+        name:"Infant Warmer",
+        department:"Neonatal",
+        serial:"IW-006",
+        manufacturer:"Dräger",
+        model:"Babytherm",
+        status:"Working"
+    }
+
+];
+
+
+/* ================= LOGIN ================= */
+
+document.getElementById("loginForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    const error =
+        document.getElementById("loginError");
+
+
+    if(username === ""){
+        error.textContent = "Please enter your name.";
+        error.style.display = "block";
+        return;
+    }
+
+
+    if(password !== correctPassword){
+
+        error.textContent = "Invalid password. Please try again.";
+
+        error.style.display = "block";
+
+        document.getElementById("password").value = "";
+
+        return;
+    }
+
+
+    error.style.display = "none";
+
+
+    document.getElementById("loggedUser").textContent = username;
+
+
+    document.getElementById("userAvatar").textContent =
+        username.charAt(0).toUpperCase();
+
+
+    document.getElementById("loginPage").style.display = "none";
+
+    document.getElementById("app").style.display = "block";
+
+
+    localStorage.setItem("bemsUser",username);
+
+
+    displayEquipment();
+
+    displayDashboardEquipment();
+
+    updateStatistics();
+
+});
+
+
+/* ================= CHECK LOGIN ================= */
+
+window.addEventListener("load",function(){
+
+    const savedUser =
+        localStorage.getItem("bemsUser");
+
+    if(savedUser){
+
+        document.getElementById("loginPage").style.display = "none";
+
+        document.getElementById("app").style.display = "block";
+
+        document.getElementById("loggedUser").textContent = savedUser;
+
+        document.getElementById("userAvatar").textContent =
+            savedUser.charAt(0).toUpperCase();
+
+        displayEquipment();
+
+        displayDashboardEquipment();
+
+        updateStatistics();
+    }
+
+});
+
+
+/* ================= PASSWORD VISIBILITY ================= */
+
+function togglePassword(){
+
+    const password =
+        document.getElementById("password");
+
+    if(password.type === "password"){
+        password.type = "text";
+    }else{
+        password.type = "password";
+    }
+
+}
+
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+    localStorage.removeItem("bemsUser");
+
+    document.getElementById("app").style.display = "none";
+
+    document.getElementById("loginPage").style.display = "flex";
+
+    document.getElementById("username").value = "";
+
+    document.getElementById("password").value = "";
+
+}
+
+
+/* ================= PAGE NAVIGATION ================= */
+
+function showPage(pageId,element){
+
+    document.querySelectorAll(".page").forEach(page=>{
+        page.classList.remove("active");
+    });
+
+
+    document.getElementById(pageId).classList.add("active");
+
+
+    document.querySelectorAll(".nav-item").forEach(item=>{
+        item.classList.remove("active");
+    });
+
+
+    element.classList.add("active");
+
+
+    const titles = {
+
+        dashboard:"Dashboard",
+
+        equipment:"Equipment Management",
+
+        maintenance:"Maintenance",
+
+        departments:"Departments",
+
+        engineers:"Biomedical Engineers",
+
+        reports:"Reports"
+
+    };
+
+
+    document.getElementById("pageTitle").textContent =
+        titles[pageId];
+
+
+    document.getElementById("sidebar").classList.remove("open");
+
+}
+
+
+/* ================= MOBILE SIDEBAR ================= */
+
+function toggleSidebar(){
+
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
+
+}
+
+
+/* ================= STATUS CLASS ================= */
+
+function getStatusClass(status){
+
+    if(status === "Working"){
+        return "status-working";
+    }
+
+    if(status === "Maintenance"){
+        return "status-maintenance";
+    }
+
+    return "status-out";
+
+}
+
+
+/* ================= DISPLAY EQUIPMENT ================= */
+
+function displayEquipment(data = equipment){
+
+    const table =
+        document.getElementById("equipmentTable");
+
+    table.innerHTML = "";
+
+
+    data.forEach(eq=>{
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>
+                <strong>${escapeHTML(eq.name)}</strong>
+            </td>
+
+            <td>${escapeHTML(eq.department)}</td>
+
+            <td>${escapeHTML(eq.serial)}</td>
+
+            <td>${escapeHTML(eq.manufacturer)}</td>
+
+            <td>${escapeHTML(eq.model)}</td>
+
+            <td>
+                <span class="status ${getStatusClass(eq.status)}">
+                    ${escapeHTML(eq.status)}
+                </span>
+            </td>
+
+            <td>
+                <button
+                    class="delete-btn"
+                    onclick="deleteEquipment(${eq.id})"
+                >
+                    🗑
+                </button>
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* ================= DASHBOARD TABLE ================= */
+
+function displayDashboardEquipment(){
+
+    const table =
+        document.getElementById("dashboardTable");
+
+    table.innerHTML = "";
+
+
+    equipment.slice(0,6).forEach(eq=>{
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>
+                <strong>${escapeHTML(eq.name)}</strong>
+            </td>
+
+            <td>${escapeHTML(eq.department)}</td>
+
+            <td>${escapeHTML(eq.serial)}</td>
+
+            <td>
+                <span class="status ${getStatusClass(eq.status)}">
+                    ${escapeHTML(eq.status)}
+                </span>
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+}
+
+
+/* ================= STATISTICS ================= */
+
+function updateStatistics(){
+
+    const total = equipment.length;
+
+    const working =
+        equipment.filter(e=>e.status==="Working").length;
+
+    const maintenance =
+        equipment.filter(e=>e.status==="Maintenance").length;
+
+    const out =
+        equipment.filter(e=>e.status==="Out of Service").length;
+
+
+    animateNumber("totalCount",total);
+
+    animateNumber("workingCount",working);
+
+    animateNumber("maintenanceCount",maintenance);
+
+    animateNumber("outCount",out);
+
+}
+
+
+/* ================= NUMBER ANIMATION ================= */
+
+function animateNumber(id,target){
+
+    const element =
+        document.getElementById(id);
+
+    let current = 0;
+
+    const duration = 600;
+
+    const start = performance.now();
+
+
+    function update(time){
+
+        const progress =
+            Math.min((time-start)/duration,1);
+
+        current =
+            Math.floor(progress*target);
+
+        element.textContent = current;
+
+
+        if(progress < 1){
+            requestAnimationFrame(update);
+        }
+
+    }
+
+
+    requestAnimationFrame(update);
+
+}
+
+
+/* ================= MODAL ================= */
+
+function openModal(){
+
+    document
+        .getElementById("equipmentModal")
+        .classList.add("show");
+
+}
+
+
+function closeModal(){
+
+    document
+        .getElementById("equipmentModal")
+        .classList.remove("show");
+
+    document
+        .getElementById("equipmentForm")
+        .reset();
+
+}
+
+
+/* ================= ADD EQUIPMENT ================= */
+
+document
+    .getElementById("equipmentForm")
+    .addEventListener("submit",function(e){
+
+        e.preventDefault();
+
+
+        const newEquipment = {
+
+            id:Date.now(),
+
+            name:
+                document.getElementById("eqName").value.trim(),
+
+            department:
+                document.getElementById("eqDepartment").value,
+
+            serial:
+                document.getElementById("eqSerial").value.trim(),
+
+            manufacturer:
+                document.getElementById("eqManufacturer").value.trim(),
+
+            model:
+                document.getElementById("eqModel").value.trim(),
+
+            status:
+                document.getElementById("eqStatus").value
+
+        };
+
+
+        equipment.push(newEquipment);
+
+
+        displayEquipment();
+
+        displayDashboardEquipment();
+
+        updateStatistics();
+
+        closeModal();
+
+    });
+
+
+/* ================= DELETE ================= */
+
+function deleteEquipment(id){
+
+    const item =
+        equipment.find(e=>e.id===id);
+
+
+    if(!item) return;
+
+
+    const confirmed =
+        confirm(
+            "Delete " +
+            item.name +
+            " from the equipment inventory?"
+        );
+
+
+    if(!confirmed) return;
+
+
+    equipment =
+        equipment.filter(e=>e.id!==id);
+
+
+    displayEquipment();
+
+    displayDashboardEquipment();
+
+    updateStatistics();
+
+}
+
+
+/* ================= SEARCH ================= */
+
+function searchEquipment(){
+
+    const query =
+        document
+        .getElementById("equipmentSearch")
+        .value
+        .toLowerCase()
+        .trim();
+
+
+    const filtered =
+        equipment.filter(eq=>{
+
+            return (
+
+                eq.name.toLowerCase().includes(query) ||
+
+                eq.department.toLowerCase().includes(query) ||
+
+                eq.serial.toLowerCase().includes(query) ||
+
+                eq.manufacturer.toLowerCase().includes(query) ||
+
+                eq.model.toLowerCase().includes(query) ||
+
+                eq.status.toLowerCase().includes(query)
+
+            );
+
+        });
+
+
+    displayEquipment(filtered);
+
+}
+
+
+/* ================= MAINTENANCE ================= */
+
+function maintenanceMessage(){
+
+    alert(
+        "Maintenance management module is ready for expansion.\n\n" +
+        "You can add:\n" +
+        "• Preventive Maintenance Schedule\n" +
+        "• Corrective Maintenance Requests\n" +
+        "• Calibration Records\n" +
+        "• Technician Assignment\n" +
+        "• Maintenance History"
+    );
+
+}
+
+
+/* ================= PRINT REPORT ================= */
+
+function printReport(){
+
+    const reportWindow =
+        window.open("","_blank");
+
+
+    if(!reportWindow){
+        alert("Please allow pop-ups to print the report.");
+        return;
+    }
+
+
+    let rows = "";
+
+
+    equipment.forEach(eq=>{
+
+        rows += `
+
+            <tr>
+
+                <td>${escapeHTML(eq.name)}</td>
+
+                <td>${escapeHTML(eq.department)}</td>
+
+                <td>${escapeHTML(eq.serial)}</td>
+
+                <td>${escapeHTML(eq.manufacturer)}</td>
+
+                <td>${escapeHTML(eq.model)}</td>
+
+                <td>${escapeHTML(eq.status)}</td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    reportWindow.document.write(`
+
+        <html>
+
+        <head>
+
+            <title>BEMS Equipment Report</title>
+
+            <style>
+
+                body{
+                    font-family:Arial,sans-serif;
+                    padding:30px;
+                    color:#111;
+                }
+
+                h1{
+                    color:#087f9c;
+                }
+
+                p{
+                    color:#555;
+                }
+
+                table{
+                    width:100%;
+                    border-collapse:collapse;
+                    margin-top:25px;
+                }
+
+                th,td{
+                    border:1px solid #ccc;
+                    padding:10px;
+                    text-align:left;
+                }
+
+                th{
+                    background:#eee;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <h1>BEMS Equipment Report</h1>
+
+            <p>
+                Biomedical Equipment Management System
+            </p>
+
+            <p>
+                Generated by: ${escapeHTML(
+                    localStorage.getItem("bemsUser") || "User"
+                )}
+            </p>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Equipment</th>
+
+                        <th>Department</th>
+
+                        <th>Serial</th>
+
+                        <th>Manufacturer</th>
+
+                        <th>Model</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${rows}
+
+                </tbody>
+
+            </table>
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    reportWindow.document.close();
+
+    reportWindow.focus();
+
+    reportWindow.print();
+
+}
+
+
+/* ================= HTML SECURITY ================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ================= BUTTON RIPPLE ================= */
+
+document.addEventListener("click",function(e){
+
+    const button =
+        e.target.closest(
+            ".primary-btn,.login-btn,.logout-btn"
+        );
+
+
+    if(!button) return;
+
+
+    const circle =
+        document.createElement("span");
+
+    circle.classList.add("ripple");
+
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    const size =
+        Math.max(rect.width,rect.height);
+
+
+    circle.style.width = size+"px";
+
+    circle.style.height = size+"px";
+
+    circle.style.left =
+        (e.clientX-rect.left-size/2)+"px";
+
+    circle.style.top =
+        (e.clientY-rect.top-size/2)+"px";
+
+
+    button.appendChild(circle);
+
+
+    setTimeout(()=>{
+        circle.remove();
+    },600);
+
+});
+
+
+/* ================= CLOSE MODAL OUTSIDE ================= */
+
+document
+    .getElementById("equipmentModal")
+    .addEventListener("click",function(e){
+
+        if(e.target === this){
+            closeModal();
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
